@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблиця статусів</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="../styles/task_6.css">
+    
+
+    <style>
+       
+    </style>
+</head>
+
+<body><div id="app">
+    <form @submit="onSubmit">
+        <label>Нова замовлена страва
+            <input type="text" v-model.trim="dishName">
+        </label>
+        <button :disabled="!dishName">Додати</button>
+    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Очікують на виконання</th>
+                <th>Виконуються</th>
+                <th>Готові до виносу</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="longestLisLength===0">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr v-else v-for="i in longestLisLength">
+                <td v-if="waitingList[i-1]" :key="waitingList[i-1].id">{{waitingList[i-1].name}} <button @click="onWaitingClick(waitingList[i-1].id)" >Готувати</button></td>
+                <td v-else></td>
+                <td v-if="processingList[i-1]" :key="processingList[i-1].id">{{processingList[i-1].name}} <button @click="onProcessingClick(processingList[i-1].id)" >Приготовано</button></td>
+                <td v-else></td>
+                <td v-if="completedList[i-1]" :key="completedList[i-1].id">{{completedList[i-1].name}} <button @click="onCompletedClick(completedList[i-1].id)" >Подано</button></td>
+                <td v-else></td>
+            </tr>
+           
+        </tbody>
+    </table>
+    <div v-if="servedList.length>0"class="served-wrapper">
+        <h3>Подані страви</h3>
+        <ol class="served-list">
+            <li class="served-list-item" v-for="dish in servedList" :key="dish.id">{{dish.name}}</li>
+        </ol>
+    </div>
+    
+</div>
+
+<script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                dishName: null,
+                waitingList:[],
+                processingList:[], 
+                completedList:[],
+                servedList: []
+            }
+        },
+        computed: {
+            longestLisLength() {
+                return Math.max(this.waitingList.length, this.processingList.length, this.completedList.length);
+            }
+        },
+        methods: {
+            onSubmit(e) {
+                e.preventDefault();
+                this.waitingList.push({
+                    id: new Date().getTime(),
+                    name: this.dishName
+                })
+                this.dishName = null;
+            },
+            onWaitingClick(id) {
+                const dish =this.waitingList.find(dish=> dish.id===id);
+                const dishIndex = this.waitingList.findIndex(dish => dish.id === id);
+                this.waitingList.splice(dishIndex, 1);
+                this.processingList.push(dish);
+            
+            },
+            onProcessingClick(id) {
+                const dish =this.processingList.find(dish=> dish.id===id);
+                const dishIndex = this.processingList.findIndex(dish => dish.id === id);
+                this.processingList.splice(dishIndex, 1);
+                this.completedList.push(dish);
+            
+            },
+            onCompletedClick(id) {
+                const dish =this.completedList.find(dish=> dish.id===id);
+                const dishIndex = this.completedList.findIndex(dish => dish.id === id);
+                this.completedList.splice(dishIndex, 1);
+                this.servedList.push(dish);
+            
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+
+</html>

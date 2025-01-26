@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="../styles/task_5.css">
+</head>
+
+<body>
+
+        <div id="app">
+            <div class="search-results">
+                <div v-for="result in searchResults" :key="result.id" class="result-item">
+                    <div class="logo-name-wrapper">
+                        <img :src="result.image" alt="Logo" class="result-image" width="20" height="20">
+                        <div class="name-link-wrapper">
+                            <p class="result-name">{{result.name}}</p>
+                            <a :href="result.link" class="link">{{ result.link }}</a>
+                        </div>
+                    </div>
+                    
+                    <a :href="result.link" class="result-title">{{ result.title }}</a>
+                    <p class="result-text">{{ result.text }}</p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <script>
+        const { createApp } = Vue;
+
+         const searchResults = [
+                { id: 1, name: 'Vue.js', link: 'https://vuejs.org', title: 'Vue.js - The Progressive JavaScript Framework | Vue.js', text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur quae nobis fugit cumque sapiente amet illum, incidunt fugiat omnis quas delectus a debitis velit atque ut iste enim dolor. Ab dignissimos vel perferendis aut debitis exercitationem dolorum eum fugiat, facilis impedit veritatis perspiciatis rerum. Consectetur esse assumenda blanditiis iusto sed distinctio placeat aperiam minus accusantium?', image: 'https://png.pngitem.com/pimgs/s/295-2954420_vue-js-logo-svg-hd-png-download.png' },
+                { id: 2, name: 'MDN Web Docs', link: 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Frameworks_libraries/Vue_getting_started', title: 'Getting started with Vue - Learn web development | MDN', text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur quae nobis fugit cumque sapiente amet illum, incidunt fugiat omnis quas delectus a debitis velit atque ut iste enim dolor. Ab dignissimos vel perferendis aut debitis exercitationem dolorum eum fugiat, facilis impedit veritatis perspiciatis rerum. Consectetur esse assumenda blanditiis iusto sed distinctio placeat aperiam minus accusantium?', image: 'https://cdn-1.webcatalog.io/catalog/mdn-web-docs/mdn-web-docs-icon-filled-256.png?v=1675596631400' },
+                { id: 3, name: 'Wikipedia', link: 'https://en.wikipedia.org/wiki/Vue.js', title: 'Vue.js', text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur quae nobis fugit cumque sapiente amet illum, incidunt fugiat omnis quas delectus a debitis velit atque ut iste enim dolor. Ab dignissimos vel perferendis aut debitis exercitationem dolorum eum fugiat, facilis impedit veritatis perspiciatis rerum. Consectetur esse assumenda blanditiis iusto sed distinctio placeat aperiam minus accusantium?', image: 'https://th.bing.com/th/id/OIP.5jLdSURTsKAMhyPlNfbiqwHaHa?rs=1&pid=ImgDetMain' },
+                { id: 4, name: 'GitHab', link: 'https://github.com/vuejs', title: 'Vue', text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur quae nobis fugit cumque sapiente amet illum, incidunt fugiat omnis quas delectus a debitis velit atque ut iste enim dolor. Ab dignissimos vel perferendis aut debitis exercitationem dolorum eum fugiat, facilis impedit veritatis perspiciatis rerum. Consectetur esse assumenda blanditiis iusto sed distinctio placeat aperiam minus accusantium?', image: 'https://th.bing.com/th/id/OIP.eoZPB2gfGH-1ckaL_JSZdwHaHg?rs=1&pid=ImgDetMain' },
+            ]    
+    
+        createApp({
+            data() {
+                return { searchResults };
+            },
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

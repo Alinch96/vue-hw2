@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hola</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/task_2.css">
+  
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+</head>
+
+<body>
+<!-- Задача 2. З випадаючого списку вибираємо клас квитка у літаку. Якщо
+1) бізнес - виводимо елементи для вибору газети та коньяку (якщо вибрано коньяк, то запропонувати закуску (так/ні)), на
+фоні зображення бізнес кают
+2) економ – виводимо елементи для вибору типу пива і чипсів, на фоні хмарки. -->
+
+
+    <div id="app">
+        <div class="form-container">
+            <form @submit="onSubmit">
+                <div class="select-wrapper">
+                    <label> Виберіть ваш клас:
+                        <select v-model="orderData.ticketClass" @change="onTicketChange">
+                            <option value="" key="">Не вибрано</option>
+                            <option value="business" key="business">Бізнес</option>
+                            <option value="economy" key="economy">Економ</option>
+                        </select>
+                    </label>
+                </div>
+                <div v-if="orderData.ticketClass" class="background-container" :style="backgroundStyle">
+                    <template v-if="orderData.ticketClass==='business'">
+                        <div class="checkbox-wrapper">
+                            <label>Газета
+                                <input type="checkbox" value="newspaper" key="newspaper" v-model="orderData.newspaper">
+                            </label>
+                            <div class="cognac-wrapper">
+                                <label>Коньяк
+                                    <input type="checkbox" value="cognac" key="cognac" v-model="orderData.cognac">
+                                </label>
+                                <div v-if="orderData.cognac" class="select-wrapper">
+                                    <label> Бажаєте закуску
+                                        <select v-model="orderData.snack">
+                                            <option value="" key="">Не вибрано</option>
+                                            <option value="true" key="true">Так</option>
+                                            <option value="false" key="false">Ні</option>
+                                        </select>
+                                
+                                    </label>
+                                </div>
+                            </div>    
+                        </div>
+                    </template>   
+                
+                    <div v-else-if="orderData.ticketClass==='economy'">
+                        <label>Пиво
+                            <select v-model="orderData.beer">
+                                <option value="" key="">Не вибрано</option>
+                                <option value="light" key="light">Світле</option>
+                                <option value="dark" key="dark">Темне</option>
+                            </select>
+                        </label> 
+                        <label>Чипси
+                            <input type="checkbox" value="chips" key="chips" v-model="orderData.chips">
+                        </label>
+                    </div>
+                </div>
+                    <button v-if="orderData.ticketClass" type="submit" :disabled="isButtonDisabled">Зробити замовлення</button>
+            </div>
+    
+        </form>
+        </div>
+    
+    <script>
+        const { createApp } = Vue
+        
+        const BACKGROUND_IMG = {
+            business: "url('https://luxurylaunches.com/wp-content/uploads/2017/08/ACJ-EUR-in-4-1106x580.jpg')",
+            economy: "url('https://c.pxhere.com/photos/a4/30/airplane_flight_sky-861785.jpg!d')", 
+        };
+        const BACKGROUND_PROPERTIES = {
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
+        }
+        
+        const INITIAL_VALUES = {
+            ticketClass: '',
+            newspaper: false,
+            cognac: false,
+            snack: '',
+            chips: false,
+            beer: '',
+        };
+        
+        const app = createApp({
+            data() {
+                return {
+                    orderData: {...INITIAL_VALUES},
+                }
+                    
+            },
+            methods: {
+                onSubmit(e) {
+                    e.preventDefault();
+                    alert("Дякуємо за замовлення!")
+                    this.orderData = {...INITIAL_VALUES};
+                },
+                onTicketChange() {
+                    this.orderData.cognac =false;
+                    this.orderData.newspaper = false;
+                    this.orderData.snack = '';
+                    this.orderData.chips = false;
+                    this.orderData.beer =''
+                }
+
+            },
+            computed: {
+
+                backgroundStyle() {
+                    const backgroundImage = this.orderData.ticketClass ? BACKGROUND_IMG[this.orderData.ticketClass] : null;
+                    return {backgroundImage, ...BACKGROUND_PROPERTIES}
+                },
+                isButtonDisabled(){
+                    const { ticketClass, ...selectedValues } = this.orderData;
+                    return Object.values(selectedValues).every(value=>!value)
+                }
+  
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

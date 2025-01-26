@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="../styles/task_3.css">
+  </head>
+  <body>
+    <!-- Задача 3. Елемент тренажера англійської. Виводимо зображення елемента і слово. Користувач вводить відповідь. Якщо вірно
+    – відтворюємо фразу «Добре. Молодець!» (і додаємо зелену рамку до елемента), якщо ні - то відтворюємо фразу «Невірно,
+    спробуйте ще раз» (і додаємо червону рамку). -->
+
+    <div id="app">
+        <p class="message" :style="{color: messageColor}">{{message}}</p>
+        <div class="card" :class="{[cardBorderClass]: cardBorderClass}">
+            <img src="https://th.bing.com/th/id/R.f2051fd35468afe8dd5fd3b779736ebe?rik=LHHIegbyChFg0w&riu=http%3a%2f%2fpngimg.com%2fuploads%2fduck%2fduck_PNG5011.png&ehk=rQWzpRQO6sbnWoOy%2bEUePjUWCrYPdODCALWNux0OhM4%3d&risl=1&pid=ImgRaw&r=0"
+                alt="Duck" width="100" height="150"/>
+            <h3>duck</h3>
+            <form @submit="onSubmit">
+                <label>Ваш переклад:
+                    <input type="text" v-model.trim="userTranslation" @focus="onFocus">
+                </label>
+                <button type="submit" :disabled="!userTranslation">Перевірити</button>
+            </form>
+        </div>         
+    </div>
+    <script>
+      const { createApp } = Vue;
+
+      const TRANSLATION = 'качка';
+      
+      const MESSAGES = {
+        CORRECT: 'Добре. Молодець!',
+        WRONG: 'Невірно,спробуйте ще раз',
+      };
+      
+      createApp({
+        data() {
+          return {
+            userTranslation: null,
+            message: null,
+            cardBorderClass: null
+          };
+        },
+        methods: {
+            onSubmit(e) {
+                e.preventDefault();
+                if (this.userTranslation.toLowerCase()===TRANSLATION){
+                    this.message = MESSAGES.CORRECT;
+                    this.cardBorderClass = 'greenBorder';
+                    return;
+                }
+
+                this.message = MESSAGES.WRONG;
+                this.cardBorderClass ='redBorder';
+            },
+            onFocus() {
+                this.message= null;
+                this.cardBorderClass = null;
+
+            },
+            
+        },
+        computed: {
+            messageColor() {
+                return this.cardBorderClass && this.cardBorderClass.replace('Border', '')
+            },
+        }
+
+      }).mount('#app');
+    </script>
+  </body>
+</html>

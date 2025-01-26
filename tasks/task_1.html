@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="../styles/task_1.css">
+</head>
+
+<body>
+    <div id="app">
+        <form @submit="onSubmit">
+            <label>
+                Login:
+                <input type="text" placeholder="Enter your login" v-model="login" @focus="onFocus">
+            </label>
+            <label>
+                Password:
+                <input type="password" placeholder="Enter your password" v-model="password" @focus="onFocus">
+            </label>
+            <button type="submit" :disabled="!login || !password">Go!</button>
+        </form>
+
+        <p v-if="message" :class="{[messageClass]: message}">{{ message }}</p>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        const USERS = [
+            { login: 'alina', password: '12345' },
+            { login: 'maria', password: '123456' },
+            { login: 'taras', password: '1234' },
+        ];
+
+        createApp({
+            data() {
+                return {
+                    login: null,
+                    password: null,
+                    message: null,
+                };
+            },
+            computed: {
+                messageClass() {
+                    if (this.message=== 'Юзера з логіном Іван не знайдено') return 'ivan';
+                    if(this.message===' ') return 'success';
+                    if(this.message) return 'error';
+                         
+                },
+            },
+            methods: {
+                onFocus() {
+                    this.message = null;
+                },
+                onSubmit(e) {
+                    e.preventDefault();
+                    const user = USERS.find(user => user.login === this.login);
+                    if(!user) this.message =`Юзера з логіном ${this.login} не знайдено`;
+                    else if(user.password!==this.password) this.message ='Пароль невірний!';
+                    else this.message =' '
+                    this.password = null;
+                    this.login = null;
+                },
+            },
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
